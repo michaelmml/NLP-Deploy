@@ -139,7 +139,8 @@ def extract_sentences_with_keywords(df, keywords):
     return pd.DataFrame(results)
 
 # Streamlit UI
-st.title("PDF Text Extractor")
+st.title("Earnings Transcript Extractor")
+st.write("Works best with Refinitiv format, extracts based on structure of the transcript such as the speakers and positioning of the text.")
 ticker = st.text_input("Type ticker corresponding to the document:", value='ALK')
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
@@ -154,9 +155,9 @@ if uploaded_file:
             result_df = extract_sentences_with_keywords(table, keywords)
             
             if not result_df.empty:
-                st.write(result_df)
+                st.table(result_df)
             else:
                 st.write("No sentences found with the provided keywords.")
 
     st.subheader("Full Transcript:")
-    st.table(table)
+    st.write(table)
