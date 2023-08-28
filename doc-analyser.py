@@ -139,6 +139,123 @@ def extract_sentences_with_all_sequences(df, sequences):
     
     return pd.DataFrame(results)
 
+############# NLP Functions
+
+def clean(text):
+    text = re.sub('[0-9]+.\t', '', str(text)) # removing paragraph numbers
+    text = re.sub('\n ', '', str(text))
+    text = re.sub('\n', ' ', str(text))
+    text = re.sub("'s", '', str(text))
+    text = re.sub("-", ' ', str(text))
+    text = re.sub("— ", '', str(text))
+    text = re.sub('\"', '', str(text))
+    text = re.sub("Mr\.", 'Mr', str(text))
+    text = re.sub("Mrs\.", 'Mrs', str(text))
+    text = re.sub("[\]]", "", str(text))
+    return text
+
+def count_stopwords(text, stopwords):
+    word_tokens = word_tokenize(text)
+    stopwords_x = [w for w in word_tokens if w in stopwords]
+    return len(stopwords_x)
+
+############# Plotting Functions
+
+def plot_boxplots(data, plot_vars, labels, figsize):
+   # We need to identify is this a matrix or a vector
+    if plot_vars.ndim == 1:
+        nrows = 1
+        ncols = plot_vars.shape[0]
+    else:
+        nrows= plot_vars.shape[0]
+        ncols = plot_vars.shape[1]
+
+    f, axes = plt.subplots(nrows, ncols, sharey=False, figsize=(15,5))
+
+    for i in range(nrows):
+        for j in range(ncols):
+            if plot_vars[i,j]!=None:
+                if axes.ndim > 1:
+
+                    axes[i,j].set_title(labels[plot_vars[i,j]])
+                    axes[i,j].grid(True)
+                    #Set x ticks
+                    axes[i,j].tick_params(
+                        axis='x',          # changes apply to the x-axis
+                        which='both',      # both major and minor ticks are affected
+                        bottom=False,      # ticks along the bottom edge are off
+                        top=False,         # ticks along the top edge are off
+                        labelbottom=False)
+                    # Plot a boxplot for the column in plot_vars
+                    axes[i,j].boxplot(data[plot_vars[i,j]])
+                else:
+
+                    axes[j].set_title(labels[plot_vars[i,j]])
+                    axes[j].grid(True)
+                    #Set x ticks
+                    axes[j].tick_params(
+                        axis='x',          # changes apply to the x-axis
+                        which='both',      # both major and minor ticks are affected
+                        bottom=False,      # ticks along the bottom edge are off
+                        top=False,         # ticks along the top edge are off
+                        labelbottom=False)
+                    # Plot a boxplot for the column in plot_vars
+                    axes[j].boxplot(data[plot_vars[i,j]])
+                
+            else:
+                axes[i,j].set_visible(False)
+
+    f.tight_layout()
+    plt.show() 
+
+def get_cmap(n, name='hsv'):
+    return plt.cm.get_cmap(name, n)
+
+def plot_histograms(data, plot_vars, xlim, labels, figsize):
+
+    kwargs = dict(hist_kws={'alpha':.7}, kde_kws={'linewidth':2})
+    fig, axes = plt.subplots(plot_vars.shape[0], plot_vars.shape[1], figsize=figsize, sharey=False, dpi=100)
+
+    for i in range(plot_vars.shape[1]):
+
+        sns.distplot(data[plot_vars[0,i]] , color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1),), 
+                     ax=axes[i], axlabel=labels[plot_vars[0,i]], bins= 50, norm_hist = True)
+        # For a better visualization we set the x limit
+        axes[i].set_xlim(left=0, right=xlim[i])
+        
+    fig.tight_layout()
+
+def intro_plot(data_subset):
+    labels_dict={'sum_word_count': 'Word Count of Summaries','text_word_count': 'Word Count of Texts',
+                 'sum_char_count': 'Char Count of Summaries','text_char_count': 'Char Count of Texts',
+                 'sum_word_density': 'Word Density of Summaries','text_word_density': 'Word Density of Texts',
+                 'sum_punc_count': 'Punctuation Count of Summaries','text_punc_count': 'Punctuation Count of Texts',
+                 'text_sent_count': 'Sentence Count of Texts', 'sum_sent_count': 'Sentence Count of Summaries',
+                 'text_sent_density': 'Sentence Density of Texts', 'sum_sent_density': 'Sentence Density of Summaries',
+                 'text_stopw_count': 'Stopwords Count of Texts', 'sum_stopw_count': 'Stopwords Count of Summaries',
+                 'ADJ': 'adjective','ADP': 'adposition', 'ADV': 'adverb','CONJ': 'conjunction',
+                 'DET': 'determiner','NOUN': 'noun', 'text_unknown_count': 'Unknown words in Texts',
+                 'sum_unknown_count': 'Unknown words in Summaries',}
+    
+    data_subset = data[data['qna'] == 0]
+    data_subset = data_subset.drop(['particip'], axis=1)
+    
+    data_subset['text_sent_count'] = data_subset['Transcript_clean'].apply(lambda x : len(split_sentences(x)))
+    data_subset['text_word_count'] = data_subset['Transcript_clean'].apply(lambda x : len(x.split()))
+    data_subset['text_char_count'] = data_subset['Transcript_clean'].apply(lambda x : len(x.replace(" ","")))
+    data_subset['text_word_density'] = data_subset['text_word_count'] / (data_subset['text_char_count'] + 1)
+    data_subset['text_sent_density'] = data_subset['text_sent_count'] / (data_subset['text_word_count'] + 1)
+    data_subset['text_punc_count'] = data_subset['Transcript_clean'].apply(lambda x : len([a for a in x if a in punc]))
+    
+    # Stopwords
+    data_subset['text_stopw_count'] =  data_subset['Transcript_clean'].apply(lambda x : count_stopwords(x, stopwords))
+    data_subset['text_stopw_density'] = data_subset['text_stopw_count'] / (data_subset['text_word_count'] + 1)
+    
+    plot_vars=np.array([['text_sent_count', 'text_word_count', 'text_char_count','text_sent_density','text_word_density']])
+    plot_boxplots(data_subset, plot_vars, labels_dict, figsize=(10,3))
+    plot_histograms(data_subset, plot_vars, [200, 3000, 8000, 0.5, 0.5], labels_dict, figsize=(10,3))
+
+
 # Streamlit UI
 st.title("Earnings Transcript Extractor")
 st.write("Works best with Refinitiv format, extracts based on structure of the transcript such as the speakers and positioning of the text.")
