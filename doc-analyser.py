@@ -115,9 +115,7 @@ def extract_text_from_pdf(file, ticker):
 
                 speaker = find_speaker[0]
 
-    print(pdf.pages[0].extract_text())
-    data = data.append(df)
-    return data
+    return df
 
 # Streamlit UI
 st.title("PDF Text Extractor")
