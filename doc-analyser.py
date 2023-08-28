@@ -4,7 +4,6 @@ import pdfplumber
 import numpy as np
 import pandas as pd
 from dateutil.parser import parse
-import os
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
@@ -65,7 +64,7 @@ def extract_text_from_pdf(file, ticker):
                     conf_list = conf_speaker1 + conf_speaker2 + conf_speaker3
                     df_speaker['corp_particip'] = corp_list + (max(len(corp_list), len(conf_list)) -len(corp_list)) * ['']
                     df_speaker['conf_particip'] = conf_list + (max(len(corp_list), len(conf_list)) -len(conf_list)) * ['']
-                    df_speaker.to_csv(os.path.join(path, ticker + '_' + date + '_speakers.csv'), index=False)
+                    # df_speaker.to_csv(os.path.join(path, ticker + '_' + date + '_speakers.csv'), index=False)
 
                 # remove footer
                 if i != 0 and i != len(pdf.pages)-1:
