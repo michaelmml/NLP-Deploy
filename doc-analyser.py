@@ -4,7 +4,7 @@ import pdfplumber
 import numpy as np
 import pandas as pd
 
-def extract_text_from_pdf(file):
+def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
     # full_text = ""
     # for page in pdf.pages:
@@ -117,12 +117,13 @@ def extract_text_from_pdf(file):
 
 # Streamlit UI
 st.title("PDF Text Extractor")
+ticker = st.text_input("Type ticker corresponding to the document:", value='ALK')
 
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
 if uploaded_file:
     st.write("Extracting text... Please wait.")
-    table = extract_text_from_pdf(uploaded_file)
+    table = extract_text_from_pdf(uploaded_file, ticker)
     
     if extracted_text:
         st.subheader("Extracted Text:")
