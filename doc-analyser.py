@@ -131,7 +131,7 @@ def extract_sentences_with_all_sequences(df, sequences):
         sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', row['transcript'])
         for sentence in sentences:
             # Check if all sequences are in the sentence
-            if all(seq.lower() in sentence.lower() for seq in sequences):
+            if all(seq in sentence for seq in sequences):
                 results.append({
                     'particip': row['particip'],
                     'sentence': sentence.strip()
