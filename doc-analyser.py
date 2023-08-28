@@ -127,10 +127,5 @@ if uploaded_file:
     st.write("Extracting text... Please wait.")
     table = extract_text_from_pdf(uploaded_file, ticker)
     
-    if table:
-        st.subheader("Extracted Text:")
-        st.table(table)
-    else:
-        st.write("The PDF doesn't contain any recognizable text.")
-
-
+    st.subheader("Extracted Text:")
+    st.table(table)
