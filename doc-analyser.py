@@ -154,7 +154,7 @@ if uploaded_file:
     sequences_input = st.text_input("Enter sequences of characters separated by commas")
     sequences = [seq.strip() for seq in sequences_input.split(',')]
     if st.button("Search"):
-        if keywords:
+        if sequences:
             result_df = extract_sentences_with_all_sequences(table, sequences)
             
             if not result_df.empty:
