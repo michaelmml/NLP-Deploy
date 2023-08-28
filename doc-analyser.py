@@ -150,13 +150,13 @@ if uploaded_file:
     # Taking keyword input from user
     keywords = st.text_area("Enter keywords separated by commas").split(',')
     if st.button("Search"):
-    if keywords:
-        result_df = extract_sentences_with_keywords(table, keywords)
-        
-        if not result_df.empty:
-            st.write(result_df)
-        else:
-            st.write("No sentences found with the provided keywords.")
+        if keywords:
+            result_df = extract_sentences_with_keywords(table, keywords)
+            
+            if not result_df.empty:
+                st.write(result_df)
+            else:
+                st.write("No sentences found with the provided keywords.")
 
     st.subheader("Full Transcript:")
     st.table(table)
