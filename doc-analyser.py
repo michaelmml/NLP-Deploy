@@ -4,6 +4,7 @@ import pdfplumber
 import numpy as np
 import pandas as pd
 from dateutil.parser import parse
+import re
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
@@ -117,15 +118,45 @@ def extract_text_from_pdf(file, ticker):
 
     return df
 
+# Function to extract sentences with keywords
+def extract_sentences_with_keywords(df, keywords):
+    # Filter rows where 'qna' is 0
+    org_df = df[df['qna'] == 0]
+    
+    # Store results
+    results = []
+    
+    for _, row in org_df.iterrows():
+        # Split transcript into sentences
+        sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', row['transcript'])
+        for sentence in sentences:
+            if any(keyword.lower() in sentence.lower() for keyword in keywords):
+                results.append({
+                    'particip': row['particip'],
+                    'sentence': sentence.strip()
+                })
+    
+    return pd.DataFrame(results)
+
 # Streamlit UI
 st.title("PDF Text Extractor")
 ticker = st.text_input("Type ticker corresponding to the document:", value='ALK')
-
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
 if uploaded_file:
     st.write("Extracting text... Please wait.")
     table = extract_text_from_pdf(uploaded_file, ticker)
-    
-    st.subheader("Extracted Text:")
+
+    # Taking keyword input from user
+    keywords = st.text_area("Enter keywords separated by commas").split(',')
+    if st.button("Search"):
+    if keywords:
+        result_df = extract_sentences_with_keywords(table, keywords)
+        
+        if not result_df.empty:
+            st.write(result_df)
+        else:
+            st.write("No sentences found with the provided keywords.")
+
+    st.subheader("Full Transcript:")
     st.table(table)
