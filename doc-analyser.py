@@ -150,10 +150,12 @@ if uploaded_file:
     table = extract_text_from_pdf(uploaded_file, ticker)
 
     # Taking keyword input from user
-    keywords = st.text_area("Enter keywords separated by commas").split(',')
+    # Taking sequences input from user and splitting by comma
+    sequences_input = st.text_input("Enter sequences of characters separated by commas")
+    sequences = [seq.strip() for seq in sequences_input.split(',')]
     if st.button("Search"):
         if keywords:
-            result_df = extract_sentences_with_all_sequences(table, keywords)
+            result_df = extract_sentences_with_all_sequences(table, sequences)
             
             if not result_df.empty:
                 st.table(result_df)
