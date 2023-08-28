@@ -1,6 +1,8 @@
 # Importing necessary libraries
 import streamlit as st
 import pdfplumber
+import numpy as np
+import pandas as pd
 
 def extract_text_from_pdf(file):
     # Extract text from all pages
