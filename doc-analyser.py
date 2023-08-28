@@ -3,7 +3,7 @@ import streamlit as st
 import pdfplumber
 import numpy as np
 import pandas as pd
-from parse import *
+from dateutil.parser import parse
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
