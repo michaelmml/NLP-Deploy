@@ -10,6 +10,9 @@ def extract_text_from_pdf(file, ticker):
     # full_text = ""
     # for page in pdf.pages:
     # full_text += page.extract_text()
+
+    found_start = False
+    out = ''
     columns = ['particip', 'qna', 'transcript', 'date', 'company']
     data = pd.DataFrame(columns=columns)
   
