@@ -4,6 +4,7 @@ import pdfplumber
 import numpy as np
 import pandas as pd
 from dateutil.parser import parse
+import os
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
