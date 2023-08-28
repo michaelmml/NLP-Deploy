@@ -119,7 +119,7 @@ def extract_text_from_pdf(file, ticker):
     return df
 
 # Function to extract sentences with keywords
-def extract_sentences_with_keywords(df, keywords):
+def extract_sentences_with_all_sequences(df, sequences):
     # Filter rows where 'qna' is 0
     org_df = df[df['qna'] == 0]
     
@@ -130,7 +130,8 @@ def extract_sentences_with_keywords(df, keywords):
         # Split transcript into sentences
         sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', row['transcript'])
         for sentence in sentences:
-            if any(keyword.lower() in sentence.lower() for keyword in keywords):
+            # Check if all sequences are in the sentence
+            if all(seq.lower() in sentence.lower() for seq in sequences):
                 results.append({
                     'particip': row['particip'],
                     'sentence': sentence.strip()
@@ -152,7 +153,7 @@ if uploaded_file:
     keywords = st.text_area("Enter keywords separated by commas").split(',')
     if st.button("Search"):
         if keywords:
-            result_df = extract_sentences_with_keywords(table, keywords)
+            result_df = extract_sentences_with_all_sequences(table, keywords)
             
             if not result_df.empty:
                 st.table(result_df)
