@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 from dateutil.parser import parse
 import re
-
-import string
 import gensim
 from gensim.summarization.textcleaner import split_sentences
 
