@@ -7,6 +7,8 @@ from dateutil.parser import parse
 import re
 import gensim
 from gensim.summarization.textcleaner import split_sentences
+import nltk
+from nltk.tokenize import word_tokenize
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
