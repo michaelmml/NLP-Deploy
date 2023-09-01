@@ -156,10 +156,12 @@ def clean(text):
     text = re.sub("[\]]", "", str(text))
     return text
 
+
 def count_stopwords(text, stopwords):
     word_tokens = word_tokenize(text)
     stopwords_x = [w for w in word_tokens if w in stopwords]
     return len(stopwords_x)
+
 
 ############# Plotting Functions
 
