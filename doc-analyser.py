@@ -243,6 +243,14 @@ def intro_plot(data_subset):
                  'ADJ': 'adjective','ADP': 'adposition', 'ADV': 'adverb','CONJ': 'conjunction',
                  'DET': 'determiner','NOUN': 'noun', 'text_unknown_count': 'Unknown words in Texts',
                  'sum_unknown_count': 'Unknown words in Summaries',}
+
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('universal_tagset')
+    punc = string.punctuation
+    stopwords = nltk.corpus.stopwords.words('english')
+    data['Transcript_clean'] = data['transcript'].apply(clean)
     
     # data_subset = data[data['qna'] == 0]
     # data_subset = data_subset.drop(['particip'], axis=1)
