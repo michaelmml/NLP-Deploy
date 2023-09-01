@@ -2,5 +2,4 @@ streamlit
 pdfplumber
 numpy
 pandas
-string
 gensim
