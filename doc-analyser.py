@@ -238,8 +238,8 @@ def intro_plot(data_subset):
                  'DET': 'determiner','NOUN': 'noun', 'text_unknown_count': 'Unknown words in Texts',
                  'sum_unknown_count': 'Unknown words in Summaries',}
     
-    data_subset = data[data['qna'] == 0]
-    data_subset = data_subset.drop(['particip'], axis=1)
+    # data_subset = data[data['qna'] == 0]
+    # data_subset = data_subset.drop(['particip'], axis=1)
     
     data_subset['text_sent_count'] = data_subset['Transcript_clean'].apply(lambda x : len(split_sentences(x)))
     data_subset['text_word_count'] = data_subset['Transcript_clean'].apply(lambda x : len(x.split()))
