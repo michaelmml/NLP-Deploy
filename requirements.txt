@@ -3,3 +3,4 @@ pdfplumber
 numpy
 pandas
 gensim
+nltk
