@@ -206,7 +206,7 @@ def plot_boxplots(data, plot_vars, labels, figsize):
                 axes[i,j].set_visible(False)
 
     f.tight_layout()
-    plt.show() 
+    st.pyplot(plt)
 
 def get_cmap(n, name='hsv'):
     return plt.cm.get_cmap(name, n)
@@ -224,6 +224,7 @@ def plot_histograms(data, plot_vars, xlim, labels, figsize):
         axes[i].set_xlim(left=0, right=xlim[i])
         
     fig.tight_layout()
+    st.pyplot(plt)
 
 def intro_plot(data_subset):
     labels_dict={'sum_word_count': 'Word Count of Summaries','text_word_count': 'Word Count of Texts',
