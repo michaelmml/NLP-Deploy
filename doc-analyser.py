@@ -6,6 +6,12 @@ import pandas as pd
 from dateutil.parser import parse
 import re
 
+import string
+import nltk
+from nltk.tokenize import word_tokenize
+import gensim
+from gensim.summarization.textcleaner import split_sentences
+
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
     # full_text = ""
