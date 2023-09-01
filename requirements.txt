@@ -2,6 +2,5 @@ streamlit
 pdfplumber
 numpy
 pandas
-nltk
 string
 gensim
