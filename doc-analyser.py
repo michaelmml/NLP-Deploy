@@ -5,10 +5,15 @@ import numpy as np
 import pandas as pd
 from dateutil.parser import parse
 import re
-import gensim
-from gensim.summarization.textcleaner import split_sentences
+# import gensim
+
 import nltk
 from nltk.tokenize import word_tokenize
+from nltk.tokenize import sent_tokenize
+import matplotlib.pyplot as plt
+import string
+import seaborn as sns
+import random
 
 def extract_text_from_pdf(file, ticker):
     # Extract text from all pages
@@ -224,9 +229,16 @@ def plot_histograms(data, plot_vars, xlim, labels, figsize):
 
     for i in range(plot_vars.shape[1]):
 
-        sns.distplot(data[plot_vars[0,i]] , color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1),), 
-                     ax=axes[i], axlabel=labels[plot_vars[0,i]], bins= 50, norm_hist = True)
-        # For a better visualization we set the x limit
+        # sns.distplot(data[plot_vars[0,i]] , color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1),), 
+        #             ax=axes[i], axlabel=labels[plot_vars[0,i]], bins= 50, norm_hist = True)
+        
+        sns.histplot(data[plot_vars[0][i]], 
+                 color=(random.uniform(0, 1), random.uniform(0, 1), random.uniform(0, 1)), 
+                 ax=axes[i], 
+                 label=labels[plot_vars[0][i]], 
+                 bins=50, 
+                 stat="density")
+
         axes[i].set_xlim(left=0, right=xlim[i])
         
     fig.tight_layout()
@@ -255,7 +267,7 @@ def intro_plot(data_subset):
     # data_subset = data[data['qna'] == 0]
     # data_subset = data_subset.drop(['particip'], axis=1)
     
-    data_subset['text_sent_count'] = data_subset['Transcript_clean'].apply(lambda x : len(split_sentences(x)))
+    data_subset['text_sent_count'] = data_subset['Transcript_clean'].apply(lambda x: len(sent_tokenize(x)))
     data_subset['text_word_count'] = data_subset['Transcript_clean'].apply(lambda x : len(x.split()))
     data_subset['text_char_count'] = data_subset['Transcript_clean'].apply(lambda x : len(x.replace(" ","")))
     data_subset['text_word_density'] = data_subset['text_word_count'] / (data_subset['text_char_count'] + 1)
