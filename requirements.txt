@@ -2,5 +2,6 @@ streamlit
 pdfplumber
 numpy
 pandas
-gensim
+Matplotlib
+Seaborn
 nltk
