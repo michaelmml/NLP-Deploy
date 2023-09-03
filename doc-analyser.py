@@ -262,7 +262,7 @@ def intro_plot(data_subset):
     nltk.download('universal_tagset')
     punc = string.punctuation
     stopwords = nltk.corpus.stopwords.words('english')
-    data['Transcript_clean'] = data['transcript'].apply(clean)
+    data_subset['Transcript_clean'] = data_subset['transcript'].apply(clean)
     
     # data_subset = data[data['qna'] == 0]
     # data_subset = data_subset.drop(['particip'], axis=1)
