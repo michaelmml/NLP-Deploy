@@ -170,7 +170,7 @@ def count_stopwords(text, stopwords):
     return len(stopwords_x)
 
 
-############# Plotting Functions
+############ Plotting Functions
 
 def plot_boxplots(data, plot_vars, labels, figsize):
    # We need to identify is this a matrix or a vector
